@@ -1,4 +1,4 @@
-import models
+from models import (Base, session, Book, engine)
 
 #  main menu
 #  add, search, analysis, exit, view
@@ -8,3 +8,8 @@ import models
 #  search function
 #  data cleaning function
 #  loop runs program until exit
+
+
+if __name__ == '__main__':
+    #  create database
+    Base.metadata.create_all(engine)
