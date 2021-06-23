@@ -133,7 +133,21 @@ def app():
                 print(f'{book.id} | {book.title} | {book.author}')
         elif choice == '3':
             #  search for book
-            pass
+            id_options = []
+            for book in session.query(Book):
+                id_options.append(book.id)
+            id_error = True
+            id_choice = None
+            while id_error:
+                print(f'ID Options: {id_options}')
+                id_choice = int(input("Book ID: "))
+                if id_choice in id_options:
+                    id_error = False
+            the_book = session.query(Book).filter(Book.id == id_choice).first()
+            print(f'{the_book.title}, by {the_book.author}')
+            print(f'Published: {the_book.date_published}')
+            print(f'Price: ${the_book.price / 100}')
+            time.sleep(1.5)
         elif choice == '4':
             #  book analysis
             pass
