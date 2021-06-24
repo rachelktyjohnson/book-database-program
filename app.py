@@ -2,6 +2,7 @@ from models import (Base, session, Book, engine)
 import csv
 import datetime
 import time
+from sqlalchemy import desc
 
 #  main menu
 #  add, search, analysis, exit, view
@@ -28,6 +29,20 @@ def menu():
             return choice
         else:
             print("Please choose one of the options above (1-5)!!")
+
+
+def submenu():
+    while True:
+        print('''
+            \r1) Edit
+            \r2) Delete
+            \r3) Return to Main Menu
+        ''')
+        choice = input('What would you like to do? ')
+        if choice in ['1', '2', '3']:
+            return choice
+        else:
+            print("Please choose one of the options above (1-3)!!")
 
 
 def clean_date(date_str):
@@ -76,6 +91,30 @@ def clean_price(price_str):
                 ''')
     else:
         return return_int
+
+
+def edit_check(column_name, current_value):
+    print(f'EDIT {column_name}')
+    if column_name == 'Price':
+        print(f'Current Value: {current_value/100}')
+    elif column_name == 'Date':
+        print(f'Current Value: {current_value.strftime("%B %d, %Y")}')
+    else:
+        print(f'Current Value: {current_value}')
+
+    if column_name == 'Date' or column_name == 'Price':
+        while True:
+            changes = input('What would you like to change the value to? ')
+            if column_name == 'Date':
+                changes = clean_date(changes)
+                if type(changes) == datetime.date:
+                    return changes
+            elif column_name == 'Price':
+                changes = clean_price(changes)
+                if type(changes) == int:
+                    return changes
+    else:
+        return input('What would you like to change the value to? ')
 
 
 def add_csv():
@@ -147,10 +186,32 @@ def app():
             print(f'{the_book.title}, by {the_book.author}')
             print(f'Published: {the_book.date_published}')
             print(f'Price: ${the_book.price / 100}')
-            time.sleep(1.5)
+            sub_choice = submenu()
+            if sub_choice == '1':
+                #  edit
+                the_book.title = edit_check('Title', the_book.title)
+                the_book.author = edit_check('Author', the_book.author)
+                the_book.date_published = edit_check('Date', the_book.date_published)
+                the_book.price = edit_check('Price', the_book.price)
+                session.commit()
+                print('Book updated!')
+                time.sleep(2)
+            elif sub_choice == '2':
+                session.delete(the_book)
+                session.commit()
+                print("Book deleted")
+                time.sleep(1.5)
         elif choice == '4':
             #  book analysis
-            pass
+            oldest_book = session.query(Book).order_by(Book.date_published).first()
+            newest_book = session.query(Book).order_by(Book.date_published.desc()).first()
+            total_books = session.query(Book).count()
+            python_books = session.query(Book).filter(Book.title.like('%python%')).count()
+            print('BOOK ANALYSIS')
+            print("Oldest book: {}".format(oldest_book.title))
+            print("Newest book: {}".format(newest_book.title))
+            print("Total books: {}".format(total_books))
+            print("Total Python books: {}".format(python_books))
         else:
             print("Goodbye!")
             app_running = False
