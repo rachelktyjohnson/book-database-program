@@ -28,17 +28,18 @@ class Book(Base):
 
 
 if __name__ == "__main__":
-    Base.metadata.create_all(engine)
-
-    # rachel_user = User(name='Rachel', fullname='Rachel Johnson', nickname='Ray')
-    # session.add(rachel_user)
-    # print(rachel_user.name)
-    # print(rachel_user.id)
-    # session.commit()
-
-    # session.add_all([
-    #     User(name='Grace', fullname='Grace Hopper', nickname='Pioneer'),
-    #     User(name='Alan', fullname='Alan Turing', nickname='Computer Scientist'),
+    #     Base.metadata.create_all(engine)
+    #
+    #     # rachel_user = User(name='Rachel', fullname='Rachel Johnson', nickname='Ray')
+    #     # session.add(rachel_user)
+    #     # print(rachel_user.name)
+    #     # print(rachel_user.id)
+    #     # session.commit()
+    #
+    #     # session.add_all([
+    #     #     User(name='Grace', fullname='Grace Hopper', nickname='Pioneer'),
+    #     #     User(name='Alan', fullname='Alan Turing', nickname='Computer Scientist'),
     #     User(name='Katherine', fullname='Katherine Johnson', nickname='')
     #     ])
     # session.commit()
+    pass
